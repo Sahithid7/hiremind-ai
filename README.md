@@ -3,10 +3,37 @@
 > Build, optimize, and tailor your resume with AI. Land more interviews.
 
 ## 🌐 Live Demo
-*Coming soon — deploy to Vercel + Render*
+
+**[https://hiremind-ai-kohl.vercel.app](https://hiremind-ai-kohl.vercel.app)**
+
+| Service | URL |
+|---------|-----|
+| Frontend (Vercel) | https://hiremind-ai-kohl.vercel.app |
+| Backend API (Render) | https://hiremind-backend-ekq8.onrender.com |
+
+> ⚠️ The backend runs on Render's free tier — first request after inactivity may take 30-60 seconds to wake up.
 
 ## 📸 Screenshots
-*Screenshots coming soon*
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Resume Builder Wizard
+![Resume Builder](screenshots/resume-builder.png)
+
+### ATS Checker
+![ATS Checker](screenshots/ats-checker.png)
+
+### JD Match Analyzer
+![JD Match](screenshots/jd-match.png)
+
+### Cover Letter Generator
+![Cover Letter](screenshots/cover-letter.png)
+
+### Pricing Page
+![Pricing](screenshots/pricing.png)
+
+> To add screenshots: take a screenshot of each page, save them in a `screenshots/` folder in the repo root, and push.
 
 ---
 
