@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,7 +11,6 @@ class Settings(BaseSettings):
     debug: bool = False
     api_v1_prefix: str = "/api/v1"
 
-    # Default to SQLite so the app works without any DATABASE_URL env var
     database_url: str = Field(
         default="sqlite:///./hiremind.db",
         description="SQLAlchemy database URL.",
@@ -31,12 +30,6 @@ class Settings(BaseSettings):
     demo_user_email: str = "demo@hiremind.ai"
     demo_user_password: str = "DemoPass123!"
 
-    # Use plain str list — AnyHttpUrl validation causes SettingsError on Render
-    backend_cors_origins: list[str] = [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ]
-
     upload_dir: str = "uploads"
     max_upload_size_mb: int = 10
 
@@ -51,21 +44,6 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
         case_sensitive=False,
     )
-
-    @field_validator("backend_cors_origins", mode="before")
-    @classmethod
-    def split_cors_origins(cls, value):
-        if isinstance(value, str) and value:
-            # Handle both comma-separated and JSON array formats
-            v = value.strip()
-            if v.startswith("["):
-                import json
-                try:
-                    return json.loads(v)
-                except Exception:
-                    pass
-            return [origin.strip().strip('"').strip("'") for origin in v.split(",") if origin.strip()]
-        return value
 
 
 @lru_cache
