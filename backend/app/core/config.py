@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import AnyHttpUrl, Field, field_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,14 +11,15 @@ class Settings(BaseSettings):
     debug: bool = False
     api_v1_prefix: str = "/api/v1"
 
+    # Default to SQLite so the app works without any DATABASE_URL env var
     database_url: str = Field(
-        default="postgresql+psycopg2://hiremind:hiremind@db:5432/hiremind",
+        default="sqlite:///./hiremind.db",
         description="SQLAlchemy database URL.",
     )
     create_tables_on_startup: bool = True
 
     jwt_secret_key: str = Field(
-        default="change-me-in-production",
+        default="change-me-in-production-use-long-random-string",
         min_length=16,
         description="Secret key used to sign JWT access tokens.",
     )
@@ -26,11 +27,12 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24
 
     password_bcrypt_rounds: int = 12
-    seed_demo_user: bool = True
+    seed_demo_user: bool = False
     demo_user_email: str = "demo@hiremind.ai"
     demo_user_password: str = "DemoPass123!"
 
-    backend_cors_origins: list[AnyHttpUrl | str] = [
+    # Use plain str list — AnyHttpUrl validation causes SettingsError on Render
+    backend_cors_origins: list[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ]
@@ -42,7 +44,6 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
     gemini_api_key: str | None = None
     groq_api_key: str | None = None
-    
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -53,9 +54,17 @@ class Settings(BaseSettings):
 
     @field_validator("backend_cors_origins", mode="before")
     @classmethod
-    def split_cors_origins(cls, value: str | list[str]) -> list[str] | str:
+    def split_cors_origins(cls, value):
         if isinstance(value, str) and value:
-            return [origin.strip() for origin in value.split(",")]
+            # Handle both comma-separated and JSON array formats
+            v = value.strip()
+            if v.startswith("["):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip().strip('"').strip("'") for origin in v.split(",") if origin.strip()]
         return value
 
 
