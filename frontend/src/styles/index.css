@@ -3,12 +3,44 @@
 @tailwind utilities;
 
 :root {
-  color: #101828;
-  background: #f4f7fb;
+  /* HireMind AI — warm cream / brown palette */
+  --color-ink:      26  15  10;    /* #1A0F0A near-black brown   */
+  --color-graphite: 107  76  59;   /* #6B4C3B medium brown       */
+  --color-mist:     250 247 242;   /* #FAF7F2 warm cream         */
+  --color-line:     232 221 212;   /* #E8DDD4 cream border       */
+  --color-signal:    44  24  16;   /* #2C1810 dark brown primary */
+  --color-mint:      45 106  79;   /* #2D6A4F green (ATS scores) */
+  --color-coral:    200  72  50;   /* error red                  */
+  --color-amber:    212 168  83;   /* #D4A853 golden accent      */
+  --color-paper:    255 255 255;   /* white cards                */
+  --color-lilac:    250 247 242;   /* same as mist               */
+  --color-peach:    253 249 243;   /* very light warm            */
+  --color-glass:    255 255 255;   /* white                      */
+  --shadow-soft:     44  24  16;   /* brown shadow               */
+  color: rgb(var(--color-ink));
+  background: rgb(var(--color-mist));
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode keeps neutral dark for the wizard/builder pages */
+.dark {
+  --color-ink:      244 240 235;
+  --color-graphite: 200 185 170;
+  --color-mist:      22  16  12;
+  --color-line:      52  40  32;
+  --color-signal:   212 168  83;   /* gold in dark mode          */
+  --color-mint:      54 211 153;
+  --color-coral:    251 133 114;
+  --color-amber:    212 168  83;
+  --color-paper:     30  20  14;
+  --color-lilac:     38  26  18;
+  --color-peach:     44  28  18;
+  --color-glass:     30  20  14;
+  --shadow-soft:      0   0   0;
+  color-scheme: dark;
 }
 
 * {
@@ -19,6 +51,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: rgb(var(--color-mist));
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+/* Playfair Display for display headings */
+.font-display {
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 button,
@@ -33,10 +72,115 @@ select {
 }
 
 .panel {
-  @apply border border-line bg-white shadow-sm;
-  border-radius: 8px;
+  @apply border border-line bg-paper/90 shadow-sm backdrop-blur;
+  border-radius: 14px;
+}
+
+.resume-paper {
+  @apply border border-line bg-white/90 shadow-card backdrop-blur;
+  border-radius: 10px;
 }
 
 .metric-tile {
   @apply panel p-5;
+}
+
+.surface-enter {
+  animation: surface-enter 420ms ease-out both;
+}
+
+.soft-shimmer {
+  background: linear-gradient(90deg, rgb(var(--color-line) / 0.45) 0%, rgb(var(--color-paper)) 45%, rgb(var(--color-line) / 0.45) 100%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.glass-card {
+  @apply border border-line bg-glass/70 shadow-card backdrop-blur-xl;
+  border-radius: 16px;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, rgb(var(--color-mint)), rgb(var(--color-signal)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .bg-white,
+.dark .bg-slate-50 {
+  background-color: rgb(var(--color-glass) / 0.72);
+}
+
+.dark .bg-blue-50,
+.dark .bg-emerald-50,
+.dark .bg-orange-50,
+.dark .bg-amber-50,
+.dark .bg-slate-100 {
+  background-color: rgb(var(--color-lilac) / 0.65);
+}
+
+.dark .text-slate-300,
+.dark .text-slate-400,
+.dark .text-slate-500,
+.dark .text-slate-600,
+.dark .text-slate-700 {
+  color: rgb(var(--color-graphite));
+}
+
+.hiremind-resume-document,
+.dark .hiremind-resume-document {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+.dark .hiremind-resume-document .text-slate-500 {
+  color: #64748b;
+}
+
+.dark .hiremind-resume-document .text-slate-600,
+.dark .hiremind-resume-document .text-slate-700 {
+  color: #334155;
+}
+
+.dark .hiremind-resume-document .bg-emerald-50 {
+  background-color: #ecfdf5;
+}
+
+.dark .hiremind-resume-document .bg-indigo-50 {
+  background-color: #eef2ff;
+}
+
+.hiremind-cover-document,
+.dark .hiremind-cover-document {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+.dark .hiremind-cover-document .text-slate-600,
+.dark .hiremind-cover-document .text-slate-700,
+.dark .hiremind-cover-document .text-slate-800 {
+  color: #334155;
+}
+
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 220% 0;
+  }
+  100% {
+    background-position: -220% 0;
+  }
 }

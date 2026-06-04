@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function BrandMark({ to = "/", compact = false, inverse = false }) {
   return (
     <Link to={to} className="flex items-center gap-3">
-      <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${inverse ? "bg-white text-ink" : "bg-ink text-white"}`}>
+      <span className={`flex h-10 w-10 items-center justify-center rounded-lg shadow-sm ${inverse ? "bg-white text-ink" : "bg-gradient-to-br from-mint to-signal text-white"}`}>
         <BrainCircuit size={22} aria-hidden="true" />
       </span>
       {!compact && (

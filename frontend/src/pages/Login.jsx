@@ -6,6 +6,12 @@ import Button from "../components/Button";
 import FormField from "../components/FormField";
 import { useAuth } from "../context/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { getApiErrorMessage } from "../utils/apiError";
+
+const DEMO_CREDENTIALS = {
+  email: "demo@hiremind.ai",
+  password: "DemoPass123!"
+};
 
 export default function Login() {
   usePageTitle("Login");
@@ -22,13 +28,22 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    await submitLogin(form);
+  }
+
+  async function handleDemoLogin() {
+    setForm(DEMO_CREDENTIALS);
+    await submitLogin(DEMO_CREDENTIALS);
+  }
+
+  async function submitLogin(credentials) {
     setError("");
     setIsSubmitting(true);
     try {
-      await login(form);
+      await login(credentials);
       navigate(location.state?.from?.pathname ?? "/app", { replace: true });
     } catch (apiError) {
-      setError(apiError.response?.data?.detail ?? "Unable to log in. Check your credentials and try again.");
+      setError(getApiErrorMessage(apiError, "Unable to log in. Create an account or use the demo account."));
     } finally {
       setIsSubmitting(false);
     }
@@ -76,6 +91,9 @@ export default function Login() {
           {isSubmitting ? <Loader2 className="animate-spin" size={18} aria-hidden="true" /> : null}
           Log in
           <ArrowRight size={18} aria-hidden="true" />
+        </Button>
+        <Button className="w-full" disabled={isSubmitting} type="button" variant="outline" onClick={handleDemoLogin}>
+          Use demo account
         </Button>
       </form>
 

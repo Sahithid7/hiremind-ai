@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import FormField from "../components/FormField";
 import { useAuth } from "../context/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { getApiErrorMessage } from "../utils/apiError";
 
 export default function Signup() {
   usePageTitle("Signup");
@@ -37,7 +38,7 @@ export default function Signup() {
       });
       navigate("/app", { replace: true });
     } catch (apiError) {
-      setError(apiError.response?.data?.detail ?? "Unable to create your account. Please try again.");
+      setError(getApiErrorMessage(apiError, "Unable to create your account. Please try again."));
     } finally {
       setIsSubmitting(false);
     }
@@ -47,8 +48,8 @@ export default function Signup() {
     <section className="panel p-6">
       <div>
         <p className="text-sm font-semibold uppercase text-signal">Start free</p>
-        <h1 className="mt-2 text-3xl font-semibold text-ink">Create your workspace</h1>
-        <p className="mt-2 text-sm leading-6 text-graphite">Set up your career intelligence dashboard in under a minute.</p>
+        <h1 className="mt-2 text-3xl font-semibold text-ink">Create your HireMind account</h1>
+        <p className="mt-2 text-sm leading-6 text-graphite">Build ATS-ready resumes and generate cover letters with AI guidance.</p>
       </div>
 
       {error && (

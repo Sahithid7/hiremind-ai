@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24
 
     password_bcrypt_rounds: int = 12
+    seed_demo_user: bool = True
+    demo_user_email: str = "demo@hiremind.ai"
+    demo_user_password: str = "DemoPass123!"
 
     backend_cors_origins: list[AnyHttpUrl | str] = [
         "http://localhost:5173",
@@ -36,6 +39,10 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = 10
 
     openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
+    gemini_api_key: str | None = None
+    groq_api_key: str | None = None
+    
 
     model_config = SettingsConfigDict(
         env_file=".env",

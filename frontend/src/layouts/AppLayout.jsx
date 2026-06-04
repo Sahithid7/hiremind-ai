@@ -1,30 +1,28 @@
 import {
-  BarChart3,
-  BriefcaseBusiness,
-  FileSearch,
-  LayoutDashboard,
+  FileCheck2,
+  FileText,
+  Layers3,
   LogOut,
   Menu,
-  MessageSquareText,
   SearchCheck,
-  UploadCloud,
-  UserCircle
+  ShieldCheck,
+  X
 } from "lucide-react";
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
-import BrandMark from "../components/BrandMark";
-import Button from "../components/Button";
+import ThemeToggle from "../components/ThemeToggle";
 import { useAuth } from "../context/AuthContext";
 
+const BROWN  = "#2C1810";
+const BORDER = "#E8DDD4";
+
 const navItems = [
-  { to: "/app", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/app/resume-upload", label: "Resume Upload", icon: UploadCloud },
-  { to: "/app/resume-analysis", label: "Resume Analysis", icon: FileSearch },
-  { to: "/app/job-match", label: "Job Match", icon: SearchCheck },
-  { to: "/app/interview-prep", label: "Interview Prep", icon: MessageSquareText },
-  { to: "/app/applications", label: "Applications", icon: BriefcaseBusiness },
-  { to: "/app/profile", label: "Profile", icon: UserCircle }
+  { to: "/app/resume-expert",       label: "Build Resume",  icon: FileText    },
+  { to: "/app/ats-score",           label: "ATS Checker",   icon: ShieldCheck },
+  { to: "/app/resume-templates",    label: "Templates",     icon: Layers3     },
+  { to: "/app/cover-letter-expert", label: "Cover Letter",  icon: FileCheck2  },
+  { to: "/app/job-analytics",       label: "JD Match",      icon: SearchCheck },
 ];
 
 export default function AppLayout() {
@@ -38,89 +36,138 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-mist">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-line bg-white px-4 py-5 lg:block">
-        <BrandMark to="/app" />
-        <nav className="mt-8 space-y-1">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold transition ${
-                  isActive ? "bg-ink text-white" : "text-graphite hover:bg-slate-100 hover:text-ink"
-                }`
-              }
+    <div className="min-h-screen" style={{ background: "#FAF7F2", color: BROWN }}>
+      <header
+        className="sticky top-0 z-40 px-4 py-3 shadow-sm backdrop-blur-xl md:px-6"
+        style={{ background: "#fff", borderBottom: `1px solid ${BORDER}` }}
+      >
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4">
+
+          {/* Left: logo — text only, no subtitle, no icon */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsMobileNavOpen((o) => !o)}
+              className="rounded-lg p-2 transition lg:hidden"
+              style={{ color: BROWN }}
+              aria-label="Open navigation"
             >
-              <Icon size={19} aria-hidden="true" />
-              {label}
+              {isMobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+            <NavLink to="/" className="text-[22px] font-bold tracking-tight" style={{ color: BROWN }}>
+              HireMind AI
             </NavLink>
-          ))}
-        </nav>
-        <div className="absolute bottom-5 left-4 right-4 rounded-lg border border-line bg-mist p-4">
-          <p className="text-sm font-semibold text-ink">{user?.full_name ?? "HireMind User"}</p>
-          <p className="mt-1 text-xs text-graphite">{user?.target_role ?? "Career goal not set"}</p>
-          <Button className="mt-4 w-full" variant="outline" onClick={handleLogout}>
-            <LogOut size={17} aria-hidden="true" />
-            Logout
-          </Button>
-        </div>
-      </aside>
-
-      <div className="lg:pl-72">
-        <header className="sticky top-0 z-20 border-b border-line bg-white/95 px-4 py-3 backdrop-blur md:px-8">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 lg:hidden">
-              <Button variant="ghost" aria-label="Open navigation" onClick={() => setIsMobileNavOpen((open) => !open)}>
-                <Menu size={20} aria-hidden="true" />
-              </Button>
-              <BrandMark to="/app" compact />
-            </div>
-            <div className="hidden lg:block">
-              <p className="text-sm font-medium text-graphite">Welcome back</p>
-              <p className="text-lg font-semibold text-ink">{user?.full_name ?? "Builder"}</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden rounded-lg border border-line bg-mist px-3 py-2 text-sm font-medium text-graphite md:block">
-                Backend connected
-              </div>
-              <Button variant="signal" onClick={() => navigate("/app/resume-upload")}>
-                <UploadCloud size={17} aria-hidden="true" />
-                Upload
-              </Button>
-            </div>
           </div>
-          {isMobileNavOpen && (
-            <nav className="mt-3 grid gap-2 border-t border-line pt-3 lg:hidden">
-              {navItems.map(({ to, label, icon: Icon, end }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={end}
-                  onClick={() => setIsMobileNavOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold transition ${
-                      isActive ? "bg-ink text-white" : "text-graphite hover:bg-slate-100 hover:text-ink"
-                    }`
-                  }
-                >
-                  <Icon size={18} aria-hidden="true" />
-                  {label}
-                </NavLink>
-              ))}
-              <Button className="justify-start" variant="outline" onClick={handleLogout}>
-                <LogOut size={17} aria-hidden="true" />
-                Logout
-              </Button>
-            </nav>
-          )}
-        </header>
 
-        <main className="px-4 py-8 md:px-8">
-          <Outlet />
-        </main>
-      </div>
+          {/* Center: nav links — text-base, font-medium */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {navItems.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-[16.5px] font-semibold transition ${
+                    isActive ? "text-white shadow-sm" : "hover:bg-[#FAF7F2]"
+                  }`
+                }
+                style={({ isActive }) =>
+                  isActive
+                    ? { background: BROWN, color: "#fff" }
+                    : { color: BROWN }
+                }
+              >
+                <Icon size={17} />
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Right: Pricing + dark mode + Sign in + Get Started */}
+          <div className="flex items-center gap-2 md:gap-3">
+            <Link
+              to="/pricing"
+              className="hidden rounded-xl px-4 py-2 text-sm font-semibold transition hover:bg-[#FAF7F2] sm:inline-flex"
+              style={{ color: BROWN }}
+            >
+              Pricing
+            </Link>
+            <ThemeToggle compact />
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="hidden rounded-xl border px-4 py-2 text-base font-medium transition-colors hover:bg-[#FAF7F2] sm:inline-flex"
+              style={{ borderColor: BORDER, color: BROWN }}
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/app/resume-expert")}
+              className="rounded-xl px-4 py-2 text-base font-bold text-white transition-colors hover:bg-[#4A2318]"
+              style={{ background: BROWN }}
+            >
+              Get Started →
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile nav */}
+        {isMobileNavOpen && (
+          <nav
+            className="mx-auto mt-3 grid max-w-[1500px] gap-1 border-t pt-3 lg:hidden"
+            style={{ borderColor: BORDER }}
+          >
+            {navItems.map(({ to, label, icon: Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                onClick={() => setIsMobileNavOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium transition ${
+                    isActive ? "text-white" : ""
+                  }`
+                }
+                style={({ isActive }) =>
+                  isActive ? { background: BROWN, color: "#fff" } : { color: BROWN }
+                }
+              >
+                <Icon size={18} />
+                {label}
+              </NavLink>
+            ))}
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              <button
+                onClick={() => { setIsMobileNavOpen(false); navigate("/login"); }}
+                className="rounded-xl border py-2.5 text-base font-medium transition-colors"
+                style={{ borderColor: BORDER, color: BROWN }}
+              >
+                Sign in
+              </button>
+              <button
+                onClick={() => { setIsMobileNavOpen(false); navigate("/app/resume-expert"); }}
+                className="rounded-xl py-2.5 text-base font-bold text-white transition-colors hover:bg-[#4A2318]"
+                style={{ background: BROWN }}
+              >
+                Get Started →
+              </button>
+              {user && (
+                <button
+                  className="rounded-xl border py-2.5 text-base font-medium transition-colors sm:col-span-2"
+                  style={{ borderColor: BORDER, color: BROWN }}
+                  onClick={handleLogout}
+                >
+                  <LogOut size={15} className="mr-2 inline" />
+                  Logout
+                </button>
+              )}
+            </div>
+          </nav>
+        )}
+      </header>
+
+      <main className="px-4 py-8 md:px-8">
+        <Outlet />
+      </main>
     </div>
   );
 }
