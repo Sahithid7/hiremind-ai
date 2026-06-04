@@ -130,9 +130,14 @@ class CareerAIClient:
         _PROMPT = (
             "Extract ALL resume information and return ONLY valid JSON matching this schema:\n"
             + _JSON_SCHEMA
-            + "\nRULES: Extract EVERY job as a separate entry. Extract ALL bullet points. "
-            "Split name into firstName/lastName. Return empty string for missing text, "
-            "empty array for missing lists. NEVER return null."
+            + "\nRULES:\n"
+            "- firstName = ONLY the person's first name (e.g. 'Sahithi')\n"
+            "- lastName = ONLY the person's family/last name (e.g. 'Devineni') — NOT their job title\n"
+            "- email = the email address (look for @ symbol)\n"
+            "- phone = the phone number (10 digits)\n"
+            "- city and state = location, split into two fields\n"
+            "- Extract EVERY job as a separate experience entry with ALL bullet points\n"
+            "- Return empty string for missing text, empty array for missing lists. NEVER return null."
         )
 
         def _clean_json(raw: str) -> dict:

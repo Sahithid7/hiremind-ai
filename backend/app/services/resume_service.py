@@ -94,6 +94,13 @@ async def parse_resume_from_upload(file: UploadFile) -> tuple[str, str, ParsedRe
         pi         = r.get("contact") or {}
         first_name = _s(pi.get("firstName"))
         last_name  = _s(pi.get("lastName"))
+
+        # Guard: AI sometimes bleeds job title into lastName (e.g. "Devineni Software Eng Intern")
+        # Real last names are 1-2 words max
+        last_name_parts = last_name.split()
+        if len(last_name_parts) > 2:
+            last_name = last_name_parts[0]  # Keep only the actual surname
+
         full_name  = f"{first_name} {last_name}".strip()
 
         city      = _s(pi.get("city"))
