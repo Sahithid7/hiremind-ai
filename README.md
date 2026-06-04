@@ -15,25 +15,17 @@
 
 ## 📸 Screenshots
 
-### Home Page
-![Home Page](screenshots/home.png)
+### Home Page — Hero
+![Home Page](screenshots/home-hero.png)
 
-### Resume Builder Wizard
-![Resume Builder](screenshots/resume-builder.png)
+### Home Page — Templates Section
+![Templates](screenshots/home-templates.png)
 
-### ATS Checker
-![ATS Checker](screenshots/ats-checker.png)
-
-### JD Match Analyzer
-![JD Match](screenshots/jd-match.png)
-
-### Cover Letter Generator
-![Cover Letter](screenshots/cover-letter.png)
+### Home Page — Why HireMind
+![Why HireMind](screenshots/home-features.png)
 
 ### Pricing Page
 ![Pricing](screenshots/pricing.png)
-
-> To add screenshots: take a screenshot of each page, save them in a `screenshots/` folder in the repo root, and push.
 
 ---
 
