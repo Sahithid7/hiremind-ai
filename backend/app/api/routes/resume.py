@@ -51,7 +51,7 @@ async def extract_resume(
     request: Request,
     file: UploadFile = File(...),
 ) -> ResumeExtractResponse:
-    _rate_limit(request, max_requests=5, window_minutes=60)
+    _rate_limit(request, max_requests=50, window_minutes=60)
     print(f"=== /resume/extract HIT — filename={file.filename!r} ===", flush=True)
     original_filename, content_type, parsed = await parse_resume_from_upload(file)
     print(f"=== /resume/extract DONE — name={parsed.name!r} email={parsed.email!r} exp={len(parsed.experience)} ===", flush=True)
@@ -135,7 +135,7 @@ def rewrite_resume(payload: ResumeRewriteRequest) -> ResumeRewriteResponse:
 @router.post("/improve-summary", response_model=ImproveSummaryResponse, status_code=status.HTTP_200_OK)
 def improve_summary_endpoint(request: Request, payload: ImproveSummaryRequest) -> ImproveSummaryResponse:
     """Rewrite a professional summary to be more compelling and ATS-friendly."""
-    _rate_limit(request, max_requests=10, window_minutes=60)
+    _rate_limit(request, max_requests=50, window_minutes=60)
     result = improve_summary(payload.summary_text, payload.job_title, payload.skills)
     return ImproveSummaryResponse(improved_summary=result, message="Summary improved successfully.")
 
@@ -182,7 +182,7 @@ def improve_bullet_endpoint(payload: _ImproveBulletReq):
 @router.post("/ai-review", status_code=status.HTTP_200_OK)
 def ai_review_endpoint(request: Request, payload: _AiReviewReq):
     """Get an AI-powered review of the resume with actionable feedback."""
-    _rate_limit(request, max_requests=5, window_minutes=60)
+    _rate_limit(request, max_requests=50, window_minutes=60)
     return _ai_review_resume(payload.resume_data)
 
 
@@ -203,7 +203,7 @@ class _AutoFixAtsReq(_BM):
 @router.post("/auto-fix-ats", status_code=status.HTTP_200_OK)
 def auto_fix_ats_endpoint(request: Request, payload: _AutoFixAtsReq):
     """Auto-fix a resume for ATS optimization using AI."""
-    _rate_limit(request, max_requests=5, window_minutes=60)
+    _rate_limit(request, max_requests=50, window_minutes=60)
     return _auto_fix_ats_resume(
         payload.resume_text, payload.issues,
         payload.missing_keywords, payload.resume_data,
@@ -221,7 +221,7 @@ class _OptimizeForJobReq(_BM):
 @router.post("/optimize-for-job", status_code=status.HTTP_200_OK)
 def optimize_for_job_endpoint(request: Request, payload: _OptimizeForJobReq):
     """Optimize a resume for a specific job description using AI."""
-    _rate_limit(request, max_requests=5, window_minutes=60)
+    _rate_limit(request, max_requests=50, window_minutes=60)
     return _optimize_for_job(
         payload.resume_text, payload.resume_data,
         payload.job_description, payload.missing_keywords,
